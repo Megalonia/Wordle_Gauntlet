@@ -9,6 +9,7 @@ def find_words_of_len_5() -> None:
     with open(DICT) as file_path:
         lines = file_path.readlines();
         for line in lines:
+            #5 chars and \n, does not contation ' and is not a name.
             if len(line) == 6 and "'" not in line and line.islower():
                 words.write(line);
     words.close();
