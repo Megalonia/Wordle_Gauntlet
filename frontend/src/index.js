@@ -12,15 +12,32 @@ class App extends Component {
         input: ''
     };
 
-    layout = {
-              'default': [
-                          ' q w e r t y u i o p ',
-                          ' a s d f g h j k l {enter}',
-                          ' z x c v b n m ',
-                        ],
-            }
+    commonKeyboardOptions = {
+        onChange:   input  => this.onChange(input),
+        onKeyPress: button => this.onKeyPress(button),
+        theme: "simple-keyboard hg-theme-default hg-layout-default",
+        physicalKeyboardHighlight: true,
+        syncInstanceInputs: true,
+        mergeDisplay: true,
+        debug: true
+    };
+
+    keyboardOptions = {
+        ...this.commonKeyboardOptions,
+        layout: {
+            default : [
+                    "q w e r t y u i o p",
+                    "a s d f g h j k l",
+                    "{enter} z x c v b n m {backspace}",
+           ]
+        }
+    }
+
 
     onChange = (input) => {
+        this.setState({
+                input: input
+        })
         console.log("Input Change ", input);
     }
 
@@ -30,24 +47,33 @@ class App extends Component {
 
     onChangeInput = (event) => {
         const input = event.target.value;
-        this.setState({ input });
-        this.keyboard.setInput(input);
-    }
+        this.setState(
+            {
+                input: input
+            },
+            () => {
+                this.keyboard.setInput(input)
+            }
+        );
+    };
 
     render() {
         return (
         <div>
+
         <input
             value= {this.state.input}
             placeholder= {"Tap on Keyboard to Start"}
-            onChange={this.onChangeInput}
+            onChange={e => this.onChangeInput(e)}
         />
-        <Keyboard
-            keyboardRef={ r => (this.keyboard = r)}
-            layoutName={this.state.layoutName}
-            onChange={this.onChange}
-            onKeyPress={this.onKeyPress}
-        />
+        <div className={"keyboaraContainter"}>
+            <Keyboard
+                baseClass={"simple-keyboard-main"}
+                keyboardRef={ r => (this.keyboard = r)}
+                layoutName={this.state.layoutName}
+                {...this.keyboardOptions}
+            />
+        </div>
         </div>
         );
     }
