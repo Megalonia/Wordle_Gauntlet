@@ -6,10 +6,50 @@ import "./index.css";
 
 
 class App extends Component {
-    state = {
-        layoutName: "deafult",
-        input: "",
 
+    state = {
+        layoutName: 'default',
+        input: ''
+    };
+
+    layout = {
+              'default': [
+                          ' q w e r t y u i o p ',
+                          ' a s d f g h j k l {enter}',
+                          ' z x c v b n m ',
+                        ],
+            }
+
+    onChange = (input) => {
+        console.log("Input Change ", input);
+    }
+
+    onKeyPress = (button) => {
+        console.log("Button Pressed ", button);
+    }
+
+    onChangeInput = (event) => {
+        const input = event.target.value;
+        this.setState({ input });
+        this.keyboard.setInput(input);
+    }
+
+    render() {
+        return (
+        <div>
+        <input
+            value= {this.state.input}
+            placeholder= {"Tap on Keyboard to Start"}
+            onChange={this.onChangeInput}
+        />
+        <Keyboard
+            keyboardRef={ r => (this.keyboard = r)}
+            layoutName={this.state.layoutName}
+            onChange={this.onChange}
+            onKeyPress={this.onKeyPress}
+        />
+        </div>
+        );
     }
 }
 
